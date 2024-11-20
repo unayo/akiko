@@ -55,32 +55,10 @@
 
 
   
-  
-  <div class="site-header-image">
-    <img id="originBg" width="100%" alt="Hike News" src="">
-  </div>
-
-  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
-    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
-  </div>
-
-  <script>
-        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
-        var random = Math.floor((Math.random() * imgUrls.length ));
-        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
-          document.getElementById("originBg").src=imgUrls[random];
-          document.getElementById("blurBg").src=imgUrls[random];
-        } else {
-          document.getElementById("originBg").src='/akiko/' + imgUrls[random];
-          document.getElementById("blurBg").src='/akiko/' + imgUrls[random];
-        }
-    </script>
-
-
 
 
 <header id="allheader" class="site-header" role="banner" 
-   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+   >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -125,6 +103,212 @@
         
           <section id="main">
   
+    <article id="post-PostgreSQL2"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/akiko/2024/11/21/PostgreSQL2/">Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/akiko/2024/11/21/PostgreSQL2/" class="article-date">
+	  <time datetime="2024-11-20T16:19:29.834Z" itemprop="datePublished">November 21, 2024</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/SQL-%E6%95%99%E5%AD%B8/">SQL 教學</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/">資料庫管理</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/Tables/">Tables</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>資料表 (Tables) 是關聯式資料庫的核心，所有數據都儲存在這些表格中。本教學將幫助您掌握資料表的基礎管理操作，包括 <strong>主鍵 (Primary Key)<strong>、</strong>外來鍵 (Foreign Key)</strong> 的設置，以及如何使用 <strong>INNER JOIN</strong> 連接多張資料表進行查詢。</p>
+<hr>
+<h2 id="🏆-主鍵（Primary-Key）"><a href="#🏆-主鍵（Primary-Key）" class="headerlink" title="🏆 主鍵（Primary Key）"></a>🏆 主鍵（Primary Key）</h2><p>主鍵是一個欄位或一組欄位，用來唯一識別資料表中的每一筆資料。主鍵的好處包括：</p>
+<ul>
+<li>確保資料表中每筆資料的唯一性。</li>
+<li>加速查詢操作。</li>
+<li>確保資料的完整性。</li>
+</ul>
+<p>以下範例展示如何設置主鍵：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> students (</span><br><span class="line">    student_id SERIAL <span class="keyword">PRIMARY</span> KEY, <span class="comment">-- 自動增長的主鍵</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>),              <span class="comment">-- 學生名稱</span></span><br><span class="line">    age <span class="type">INT</span>                        <span class="comment">-- 學生年齡</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="🤝-外來鍵（Foreign-Key）"><a href="#🤝-外來鍵（Foreign-Key）" class="headerlink" title="🤝 外來鍵（Foreign Key）"></a>🤝 外來鍵（Foreign Key）</h2><p>外來鍵用來連結兩張表格，確保資料表之間的資料完整性。例如，將學生與課程建立關聯：</p>
+<p>資料表範例</p>
+<ol>
+<li><code>courses</code>：存放課程資訊。</li>
+<li><code>enrollments</code>：紀錄學生與課程的對應關係。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> courses (</span><br><span class="line">    course_id SERIAL <span class="keyword">PRIMARY</span> KEY,  <span class="comment">-- 課程 ID</span></span><br><span class="line">    course_name <span class="type">VARCHAR</span>(<span class="number">50</span>)        <span class="comment">-- 課程名稱</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> enrollments (</span><br><span class="line">    enrollment_id SERIAL <span class="keyword">PRIMARY</span> KEY, <span class="comment">-- 註冊 ID</span></span><br><span class="line">    student_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> students(student_id), <span class="comment">-- 關聯學生</span></span><br><span class="line">    course_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> courses(course_id)     <span class="comment">-- 關聯課程</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+說明：</li>
+</ol>
+<ul>
+<li><code>enrollments.student_id</code> 參考了 <code>students.student_id</code>。</li>
+<li><code>enrollments.course_id</code> 參考了 <code>courses.course_id</code>。</li>
+<li>當新增或更新資料時，資料庫會自動檢查關聯的資料是否存在。</li>
+</ul>
+<h2 id="🔄-INNER-JOIN-查詢"><a href="#🔄-INNER-JOIN-查詢" class="headerlink" title="🔄 INNER JOIN 查詢"></a>🔄 INNER JOIN 查詢</h2><p>INNER JOIN 用於合併多張表格，僅返回「在所有相關表中同時存在的資料」。</p>
+<p>查詢範例<br>我們希望查詢學生的姓名和他們選修的課程名稱。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    students.name <span class="keyword">AS</span> student_name, </span><br><span class="line">    courses.course_name <span class="keyword">AS</span> enrolled_course</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    enrollments</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> students </span><br><span class="line">    <span class="keyword">ON</span> enrollments.student_id <span class="operator">=</span> students.student_id</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> courses </span><br><span class="line">    <span class="keyword">ON</span> enrollments.course_id <span class="operator">=</span> courses.course_id;</span><br></pre></td></tr></table></figure>
+<h4 id="執行結果（範例輸出）"><a href="#執行結果（範例輸出）" class="headerlink" title="執行結果（範例輸出）"></a>執行結果（範例輸出）</h4><table>
+<thead>
+<tr>
+<th>student_name</th>
+<th>enrolled_course</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>John Doe</td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td>Jane Smith</td>
+<td>Physics</td>
+</tr>
+</tbody></table>
+<h4 id="查詢解釋"><a href="#查詢解釋" class="headerlink" title="查詢解釋"></a>查詢解釋</h4><ol>
+<li><p>起點：enrollments 表<br>此表包含學生與課程的對應關係，是查詢的起始點。</p>
+</li>
+<li><p>連接學生資訊：INNER JOIN students<br>將 students.student_id 與 enrollments.student_id 配對，獲取學生姓名。</p>
+</li>
+<li><p>連接課程資訊：INNER JOIN courses<br>將 courses.course_id 與 enrollments.course_id 配對，獲取課程名稱。</p>
+</li>
+<li><p>結果：返回學生姓名和課程名稱<br>最終輸出學生的姓名與選修的課程。</p>
+</li>
+</ol>
+<h2 id="🌟-重點提示"><a href="#🌟-重點提示" class="headerlink" title="🌟 重點提示"></a>🌟 重點提示</h2><ol>
+<li><p>使用主鍵與外來鍵確保資料完整性<br>主鍵保證資料唯一性，外來鍵確保表與表之間的正確關聯。</p>
+</li>
+<li><p>INNER JOIN 只返回匹配的資料<br>如果某筆資料在任意一張表中不存在，則不會包含在結果中。</p>
+</li>
+<li><p>進一步學習<br>可以探索其他 JOIN 類型，例如 LEFT JOIN 或 FULL OUTER JOIN，了解更複雜的資料查詢方式。</p>
+</li>
+</ol>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>本篇文章介紹了資料表管理的基礎內容，包括主鍵、外來鍵的設置及使用 INNER JOIN 進行資料表連接的查詢。透過這些操作，您可以更有效率地管理資料表並實現跨表查詢。</p>
+<p>如果您有興趣學習更進階的 SQL 操作，例如索引管理或資料庫優化，請持續關注我們的更多教學文章！</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/SQL-%E6%95%99%E5%AD%B8/">SQL 教學</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/">資料庫管理</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/Tables/">Tables</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/akiko/tags/%E8%B3%87%E6%96%99%E8%A1%A8-SQL-%E6%8C%87%E4%BB%A4-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C/" rel="tag">資料表,SQL 指令,資料庫操作</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-PostgreSQL-1"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/akiko/2024/11/21/PostgreSQL-1/">PostgreSQL 基礎教學 | 建立表單、新增資料、刪除資料、查詢資料</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/akiko/2024/11/21/PostgreSQL-1/" class="article-date">
+	  <time datetime="2024-11-20T16:07:26.434Z" itemprop="datePublished">November 21, 2024</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/PostgreSQL/">PostgreSQL</a>, <a class="article-category-link" href="/akiko/categories/PostgreSQL/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%99%E5%AD%B8/">資料庫教學</a>, <a class="article-category-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/">SQL 指令</a>, <a class="article-category-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/%E5%9F%BA%E7%A4%8E%E6%95%99%E5%AD%B8/">基礎教學</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>PostgreSQL 是一款功能強大的開源關聯式資料庫管理系統，非常適合用於中大型專案中。這篇教學將帶你快速學會如何進行以下操作：</p>
+<ol>
+<li>建立資料表</li>
+<li>新增資料</li>
+<li>查詢資料</li>
+<li>更新資料</li>
+<li>刪除資料</li>
+</ol>
+<hr>
+<h2 id="1-建立資料表-Create-Table"><a href="#1-建立資料表-Create-Table" class="headerlink" title="1. 建立資料表 (Create Table)"></a>1. 建立資料表 (Create Table)</h2><p>在資料庫中建立一個名為 <code>products</code> 的資料表，用來儲存產品相關資訊。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> products (</span><br><span class="line">    product_id SERIAL <span class="keyword">PRIMARY</span> KEY,   <span class="comment">-- 自動增長的產品 ID</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,      <span class="comment">-- 產品名稱，最多100個字符</span></span><br><span class="line">    category <span class="type">VARCHAR</span>(<span class="number">50</span>),            <span class="comment">-- 產品類別</span></span><br><span class="line">    price <span class="type">NUMERIC</span>(<span class="number">10</span>, <span class="number">2</span>),            <span class="comment">-- 價格，小數點後保留2位</span></span><br><span class="line">    in_stock <span class="type">BOOLEAN</span> <span class="keyword">DEFAULT</span> <span class="literal">TRUE</span>    <span class="comment">-- 是否有庫存，預設為有</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="欄位說明："><a href="#欄位說明：" class="headerlink" title="欄位說明："></a>欄位說明：</h4><ul>
+<li>product_id：自動增長的主鍵，PostgreSQL 會為每筆資料自動分配唯一的 ID。</li>
+<li>name：產品名稱，不允許為空值。</li>
+<li>category：產品分類。</li>
+<li>price：產品價格，支援小數格式。</li>
+<li>in_stock：庫存狀態，布林值，預設為 TRUE。</li>
+</ul>
+<h2 id="2-新增資料-Insert-Data"><a href="#2-新增資料-Insert-Data" class="headerlink" title="2. 新增資料 (Insert Data)"></a>2. 新增資料 (Insert Data)</h2><p>將資料插入 products 資料表，以下是範例資料：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> products (name, category, price, in_stock)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">    (<span class="string">&#x27;手機&#x27;</span>, <span class="string">&#x27;3C&#x27;</span>, <span class="number">999.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;耳機&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>, <span class="number">49.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;洗衣機&#x27;</span>, <span class="string">&#x27;家電&#x27;</span>, <span class="number">4999.99</span>, <span class="literal">FALSE</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-查詢資料-Select-Data"><a href="#3-查詢資料-Select-Data" class="headerlink" title="3. 查詢資料 (Select Data)"></a>3. 查詢資料 (Select Data)</h2><p>查詢所有資料<br>想要查詢表中的所有產品，可以使用以下指令：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products;</span><br></pre></td></tr></table></figure>
+
+<h3 id="篩選特定條件的資料"><a href="#篩選特定條件的資料" class="headerlink" title="篩選特定條件的資料"></a>篩選特定條件的資料</h3><p>查詢 <code>category</code> 為「3C」的產品：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;3C&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>查詢價格大於 100 的產品：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用進階篩選條件"><a href="#使用進階篩選條件" class="headerlink" title="使用進階篩選條件"></a>使用進階篩選條件</h3><p>查詢 <code>category</code> 為「3C」或「配件」的產品：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;3C&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>範圍查詢（價格介於 50 到 1000）：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="keyword">BETWEEN</span> <span class="number">50</span> <span class="keyword">AND</span> <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-更新資料-Update-Data"><a href="#4-更新資料-Update-Data" class="headerlink" title="4. 更新資料 (Update Data)"></a>4. 更新資料 (Update Data)</h2><p>將「手機」的價格更新為 899.99：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products</span><br><span class="line"><span class="keyword">SET</span> price <span class="operator">=</span> <span class="number">899.99</span></span><br><span class="line"><span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;手機&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>注意：<br>WHERE 條件是必需的，否則會更新整個表內的所有資料！</p>
+<h2 id="5-刪除資料-Delete-Data"><a href="#5-刪除資料-Delete-Data" class="headerlink" title="5. 刪除資料 (Delete Data)"></a>5. 刪除資料 (Delete Data)</h2><p>刪除 category 為「家電」的所有產品：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;家電&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="6-刪除資料表-Drop-Table"><a href="#6-刪除資料表-Drop-Table" class="headerlink" title="6. 刪除資料表 (Drop Table)"></a>6. 刪除資料表 (Drop Table)</h2><p>若不再需要這個資料表，可以直接刪除：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> products;</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/PostgreSQL/">PostgreSQL</a>, <a class="article-category-link" href="/akiko/categories/PostgreSQL/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%99%E5%AD%B8/">資料庫教學</a>, <a class="article-category-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/">SQL 指令</a>, <a class="article-category-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/%E5%9F%BA%E7%A4%8E%E6%95%99%E5%AD%B8/">基礎教學</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/akiko/tags/PostgreSQL/" rel="tag">PostgreSQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/akiko/tags/SQL-%E6%95%99%E5%AD%B8-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C-%E5%BB%BA%E7%AB%8B%E8%A1%A8%E5%96%AE/" rel="tag">SQL 教學,資料庫操作,建立表單</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
     <article id="post-Lola"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -142,12 +326,12 @@
     <div class="article-meta">
       
 	<a href="/akiko/2024/09/24/Lola/" class="article-date">
-	  <time datetime="2024-09-24T08:10:56.000Z" itemprop="datePublished">September 24, 2024</time>
+	  <time datetime="2024-09-24T08:10:00.000Z" itemprop="datePublished">September 24, 2024</time>
 	</a>
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/akiko/categories/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a>
+    <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a>
  
       
     </div>
@@ -189,7 +373,7 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/akiko/categories/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a>
+    <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a>, <a class="article-category-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a>
 
       
   <span class="ico-tags"></span>
@@ -383,6 +567,30 @@
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/akiko/2024/11/21/PostgreSQL2/">Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南</a></h6>
+              <span>November 21, 2024</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/akiko/2024/11/21/PostgreSQL-1/">PostgreSQL 基礎教學 | 建立表單、新增資料、刪除資料、查詢資料</a></h6>
+              <span>November 21, 2024</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/akiko/2024/09/24/Lola/">小仙女觀音蓮 | 美麗多肉植物介紹與養護指南</a></h6>
               <span>September 24, 2024</span>
             </div>
@@ -410,7 +618,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E5%90%88%E6%9E%9C%E8%8A%8B/">合果芋</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E5%90%88%E6%9E%9C%E8%8A%8B/%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/">蠟染合果芋</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a><span class="category-list-count">1</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/PostgreSQL/">PostgreSQL</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/PostgreSQL/%E8%B3%87%E6%96%99%E5%BA%AB%E6%95%99%E5%AD%B8/">資料庫教學</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/">SQL 指令</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/SQL-%E6%8C%87%E4%BB%A4/%E5%9F%BA%E7%A4%8E%E6%95%99%E5%AD%B8/">基礎教學</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/SQL-%E6%95%99%E5%AD%B8/">SQL 教學</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E5%90%88%E6%9E%9C%E8%8A%8B/">合果芋</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E5%90%88%E6%9E%9C%E8%8A%8B/%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/">蠟染合果芋</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/">觀音蓮</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/">小仙女觀音蓮</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/">觀葉植物</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%A7%80%E9%9F%B3%E8%93%AE/%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/">多肉植物</a><span class="category-list-count">1</span></li></ul></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/">資料庫管理</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/Tables/">Tables</a><span class="category-list-count">1</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -420,7 +628,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E5%90%88%E6%9E%9C%E8%8A%8B-%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/" rel="tag">合果芋,蠟染合果芋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/" rel="tag">多肉植物</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/" rel="tag">觀葉植物</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E8%A7%80%E9%9F%B3%E8%93%AE-%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/" rel="tag">觀音蓮,小仙女觀音蓮</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/PostgreSQL/" rel="tag">PostgreSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/SQL-%E6%95%99%E5%AD%B8-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C-%E5%BB%BA%E7%AB%8B%E8%A1%A8%E5%96%AE/" rel="tag">SQL 教學,資料庫操作,建立表單</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E5%90%88%E6%9E%9C%E8%8A%8B-%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/" rel="tag">合果芋,蠟染合果芋</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/" rel="tag">多肉植物</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/" rel="tag">觀葉植物</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E8%A7%80%E9%9F%B3%E8%93%AE-%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/" rel="tag">觀音蓮,小仙女觀音蓮</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/akiko/tags/%E8%B3%87%E6%96%99%E8%A1%A8-SQL-%E6%8C%87%E4%BB%A4-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C/" rel="tag">資料表,SQL 指令,資料庫操作</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -430,7 +638,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/akiko/tags/%E5%90%88%E6%9E%9C%E8%8A%8B-%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/" style="font-size: 10px;">合果芋,蠟染合果芋</a> <a href="/akiko/tags/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/" style="font-size: 10px;">多肉植物</a> <a href="/akiko/tags/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/" style="font-size: 20px;">觀葉植物</a> <a href="/akiko/tags/%E8%A7%80%E9%9F%B3%E8%93%AE-%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/" style="font-size: 10px;">觀音蓮,小仙女觀音蓮</a>
+      <a href="/akiko/tags/PostgreSQL/" style="font-size: 10px;">PostgreSQL</a> <a href="/akiko/tags/SQL-%E6%95%99%E5%AD%B8-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C-%E5%BB%BA%E7%AB%8B%E8%A1%A8%E5%96%AE/" style="font-size: 10px;">SQL 教學,資料庫操作,建立表單</a> <a href="/akiko/tags/%E5%90%88%E6%9E%9C%E8%8A%8B-%E8%A0%9F%E6%9F%93%E5%90%88%E6%9E%9C%E8%8A%8B/" style="font-size: 10px;">合果芋,蠟染合果芋</a> <a href="/akiko/tags/%E5%A4%9A%E8%82%89%E6%A4%8D%E7%89%A9/" style="font-size: 10px;">多肉植物</a> <a href="/akiko/tags/%E8%A7%80%E8%91%89%E6%A4%8D%E7%89%A9/" style="font-size: 20px;">觀葉植物</a> <a href="/akiko/tags/%E8%A7%80%E9%9F%B3%E8%93%AE-%E5%B0%8F%E4%BB%99%E5%A5%B3%E8%A7%80%E9%9F%B3%E8%93%AE/" style="font-size: 10px;">觀音蓮,小仙女觀音蓮</a> <a href="/akiko/tags/%E8%B3%87%E6%96%99%E8%A1%A8-SQL-%E6%8C%87%E4%BB%A4-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">資料表,SQL 指令,資料庫操作</a>
     </div>
   </div>
 
@@ -440,7 +648,7 @@
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/akiko/archives/2024/09/">September 2024</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/akiko/archives/2024/11/">November 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/akiko/archives/2024/09/">September 2024</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -495,9 +703,6 @@
 
 
     <!-- headerblur min height -->
-    
-      var headerblur = document.getElementById("header-blur");
-      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>

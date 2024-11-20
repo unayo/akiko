@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南 | ARKIKO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="資料表,SQL 指令,資料庫操作" />
+  
+  
+  
+  
+  <meta name="description" content="本文詳細介紹如何有效管理資料表 (Tables)，包括創建、修改結構、新增與刪除資料，幫助您掌握資料庫的基礎操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南">
+<meta property="og:url" content="https://username.github.io/akiko/2024/11/21/PostgreSQL2/index.html">
+<meta property="og:site_name" content="ARKIKO">
+<meta property="og:description" content="本文詳細介紹如何有效管理資料表 (Tables)，包括創建、修改結構、新增與刪除資料，幫助您掌握資料庫的基礎操作。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-11-20T16:19:29.834Z">
+<meta property="article:modified_time" content="2024-11-20T16:30:29.903Z">
+<meta property="article:author" content="planter channel">
+<meta property="article:tag" content="資料表,SQL 指令,資料庫操作">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="ARKIKO" type="application/atom+xml">
+  
+  <link rel="icon" href="/akiko/css/images/favicon.ico">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/akiko/css/style.css">
+
+
+  
+<script src="/akiko/js/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/akiko/css/bootstrap.css" >
+  <link rel="stylesheet" href="/akiko/css/fashion.css" >
+  <link rel="stylesheet" href="/akiko/css/glyphs.css" >
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/akiko/" title="ARKIKO" rel="home"> ARKIKO </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663" linktext="/"> <a class="" href="/akiko/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663" linktext="archives"> <a class="" href="/akiko/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663" linktext="categories"> <a class="" href="/akiko/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663" linktext="tags"> <a class="" href="/akiko/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663" linktext="about"> <a class="" href="/akiko/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-PostgreSQL2" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/akiko/2024/11/21/PostgreSQL2/" class="article-date">
+	  <time datetime="2024-11-20T16:19:29.834Z" itemprop="datePublished">November 21, 2024</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/SQL-%E6%95%99%E5%AD%B8/">SQL 教學</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/">資料庫管理</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/Tables/">Tables</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>資料表 (Tables) 是關聯式資料庫的核心，所有數據都儲存在這些表格中。本教學將幫助您掌握資料表的基礎管理操作，包括 <strong>主鍵 (Primary Key)<strong>、</strong>外來鍵 (Foreign Key)</strong> 的設置，以及如何使用 <strong>INNER JOIN</strong> 連接多張資料表進行查詢。</p>
+<hr>
+<h2 id="🏆-主鍵（Primary-Key）"><a href="#🏆-主鍵（Primary-Key）" class="headerlink" title="🏆 主鍵（Primary Key）"></a>🏆 主鍵（Primary Key）</h2><p>主鍵是一個欄位或一組欄位，用來唯一識別資料表中的每一筆資料。主鍵的好處包括：</p>
+<ul>
+<li>確保資料表中每筆資料的唯一性。</li>
+<li>加速查詢操作。</li>
+<li>確保資料的完整性。</li>
+</ul>
+<p>以下範例展示如何設置主鍵：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> students (</span><br><span class="line">    student_id SERIAL <span class="keyword">PRIMARY</span> KEY, <span class="comment">-- 自動增長的主鍵</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">50</span>),              <span class="comment">-- 學生名稱</span></span><br><span class="line">    age <span class="type">INT</span>                        <span class="comment">-- 學生年齡</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="🤝-外來鍵（Foreign-Key）"><a href="#🤝-外來鍵（Foreign-Key）" class="headerlink" title="🤝 外來鍵（Foreign Key）"></a>🤝 外來鍵（Foreign Key）</h2><p>外來鍵用來連結兩張表格，確保資料表之間的資料完整性。例如，將學生與課程建立關聯：</p>
+<p>資料表範例</p>
+<ol>
+<li><code>courses</code>：存放課程資訊。</li>
+<li><code>enrollments</code>：紀錄學生與課程的對應關係。<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> courses (</span><br><span class="line">    course_id SERIAL <span class="keyword">PRIMARY</span> KEY,  <span class="comment">-- 課程 ID</span></span><br><span class="line">    course_name <span class="type">VARCHAR</span>(<span class="number">50</span>)        <span class="comment">-- 課程名稱</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> enrollments (</span><br><span class="line">    enrollment_id SERIAL <span class="keyword">PRIMARY</span> KEY, <span class="comment">-- 註冊 ID</span></span><br><span class="line">    student_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> students(student_id), <span class="comment">-- 關聯學生</span></span><br><span class="line">    course_id <span class="type">INT</span> <span class="keyword">REFERENCES</span> courses(course_id)     <span class="comment">-- 關聯課程</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+說明：</li>
+</ol>
+<ul>
+<li><code>enrollments.student_id</code> 參考了 <code>students.student_id</code>。</li>
+<li><code>enrollments.course_id</code> 參考了 <code>courses.course_id</code>。</li>
+<li>當新增或更新資料時，資料庫會自動檢查關聯的資料是否存在。</li>
+</ul>
+<h2 id="🔄-INNER-JOIN-查詢"><a href="#🔄-INNER-JOIN-查詢" class="headerlink" title="🔄 INNER JOIN 查詢"></a>🔄 INNER JOIN 查詢</h2><p>INNER JOIN 用於合併多張表格，僅返回「在所有相關表中同時存在的資料」。</p>
+<p>查詢範例<br>我們希望查詢學生的姓名和他們選修的課程名稱。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    students.name <span class="keyword">AS</span> student_name, </span><br><span class="line">    courses.course_name <span class="keyword">AS</span> enrolled_course</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    enrollments</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> students </span><br><span class="line">    <span class="keyword">ON</span> enrollments.student_id <span class="operator">=</span> students.student_id</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> courses </span><br><span class="line">    <span class="keyword">ON</span> enrollments.course_id <span class="operator">=</span> courses.course_id;</span><br></pre></td></tr></table></figure>
+<h4 id="執行結果（範例輸出）"><a href="#執行結果（範例輸出）" class="headerlink" title="執行結果（範例輸出）"></a>執行結果（範例輸出）</h4><table>
+<thead>
+<tr>
+<th>student_name</th>
+<th>enrolled_course</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>John Doe</td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td>Jane Smith</td>
+<td>Physics</td>
+</tr>
+</tbody></table>
+<h4 id="查詢解釋"><a href="#查詢解釋" class="headerlink" title="查詢解釋"></a>查詢解釋</h4><ol>
+<li><p>起點：enrollments 表<br>此表包含學生與課程的對應關係，是查詢的起始點。</p>
+</li>
+<li><p>連接學生資訊：INNER JOIN students<br>將 students.student_id 與 enrollments.student_id 配對，獲取學生姓名。</p>
+</li>
+<li><p>連接課程資訊：INNER JOIN courses<br>將 courses.course_id 與 enrollments.course_id 配對，獲取課程名稱。</p>
+</li>
+<li><p>結果：返回學生姓名和課程名稱<br>最終輸出學生的姓名與選修的課程。</p>
+</li>
+</ol>
+<h2 id="🌟-重點提示"><a href="#🌟-重點提示" class="headerlink" title="🌟 重點提示"></a>🌟 重點提示</h2><ol>
+<li><p>使用主鍵與外來鍵確保資料完整性<br>主鍵保證資料唯一性，外來鍵確保表與表之間的正確關聯。</p>
+</li>
+<li><p>INNER JOIN 只返回匹配的資料<br>如果某筆資料在任意一張表中不存在，則不會包含在結果中。</p>
+</li>
+<li><p>進一步學習<br>可以探索其他 JOIN 類型，例如 LEFT JOIN 或 FULL OUTER JOIN，了解更複雜的資料查詢方式。</p>
+</li>
+</ol>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>本篇文章介紹了資料表管理的基礎內容，包括主鍵、外來鍵的設置及使用 INNER JOIN 進行資料表連接的查詢。透過這些操作，您可以更有效率地管理資料表並實現跨表查詢。</p>
+<p>如果您有興趣學習更進階的 SQL 操作，例如索引管理或資料庫優化，請持續關注我們的更多教學文章！</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/akiko/categories/SQL-%E6%95%99%E5%AD%B8/">SQL 教學</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/">資料庫管理</a>, <a class="article-category-link" href="/akiko/categories/%E8%B3%87%E6%96%99%E5%BA%AB%E7%AE%A1%E7%90%86/Tables/">Tables</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/akiko/tags/%E8%B3%87%E6%96%99%E8%A1%A8-SQL-%E6%8C%87%E4%BB%A4-%E8%B3%87%E6%96%99%E5%BA%AB%E6%93%8D%E4%BD%9C/" rel="tag">資料表,SQL 指令,資料庫操作</a></li></ul>
+
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/akiko/2024/11/21/PostgreSQL-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PostgreSQL 基礎教學 | 建立表單、新增資料、刪除資料、查詢資料</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8F%86-%E4%B8%BB%E9%8D%B5%EF%BC%88Primary-Key%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">🏆 主鍵（Primary Key）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%A4%9D-%E5%A4%96%E4%BE%86%E9%8D%B5%EF%BC%88Foreign-Key%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">🤝 外來鍵（Foreign Key）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%84-INNER-JOIN-%E6%9F%A5%E8%A9%A2"><span class="nav-number">3.</span> <span class="nav-text">🔄 INNER JOIN 查詢</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E7%B5%90%E6%9E%9C%EF%BC%88%E7%AF%84%E4%BE%8B%E8%BC%B8%E5%87%BA%EF%BC%89"><span class="nav-number">3.0.1.</span> <span class="nav-text">執行結果（範例輸出）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E8%A7%A3%E9%87%8B"><span class="nav-number">3.0.2.</span> <span class="nav-text">查詢解釋</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8C%9F-%E9%87%8D%E9%BB%9E%E6%8F%90%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">🌟 重點提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">5.</span> <span class="nav-text">結語</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/akiko/" class="mobile-nav-link">Home</a>
+  
+    <a href="/akiko/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/akiko/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/akiko/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/akiko/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2024 ARKIKO All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站訪客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站總訪问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  
+<link rel="stylesheet" href="/akiko/fancybox/jquery.fancybox.css">
+
+  
+<script src="/akiko/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/akiko/js/script.js"></script>
+
+
+<script src="/akiko/js/bootstrap.js"></script>
+
+
+<script src="/akiko/js/main.js"></script>
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
