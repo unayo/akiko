@@ -1,16 +1,20 @@
-# secondaryMarket
-
+# akiko notebook
+https://unayo.github.io/akiko/
 ## 配置
 - node: v18
 - hexo-deployer-git // 部署
+- theme: hipaper
 ## 指令
-- hexo server
+- npm install
+- hexo s  // 架設本地端伺服器，也可以輸入 hexo server
+- hexo g  // 靜態文件 hexo generate
 
-## 安裝方式
+## 更新靜態頁面
 ```
-npm install
-hexo s  // 架設本地端伺服器，也可以輸入 hexo server
-hexo g  // 靜態文件
+- 更新 githubpages (branch: gh-pages)
+hexo clean
+hexo generate
+hexo deploy
 
 ```
 ### 開發環境
@@ -21,7 +25,6 @@ hexo g  //建立靜態檔案，也可以輸入 hexo generate
 hexo d  //部署至 Github Pages，也可以輸入 hexo deploy
 (http://localhost:4000/admin )就能進入後台 (npm install hexo-admin --save)
 ```
-https://ed521.github.io/2019/07/hexo-install/
 
 ### Generate static files
 

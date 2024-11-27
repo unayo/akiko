@@ -13,7 +13,8 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url:  https://username.github.io/
+url:  https://username.github.io/akiko
+root: /akiko/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -106,8 +107,8 @@ theme: hipaper
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/unayo/akiko.github.io.git
-  branch: master
+  repo: git@github.com:unayo/akiko.git
+  branch: gh-pages
 
 # 文章搜尋功能
 search:
