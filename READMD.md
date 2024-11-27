@@ -5,6 +5,9 @@ https://unayo.github.io/akiko/
 - hexo-deployer-git // 部署
 - theme: hipaper
 - google search console
+- hexo-generator-sitemap --save // 自動生成 sitemap.xml 套件
+
+
 ## 指令
 - npm install
 - hexo s  // 架設本地端伺服器，也可以輸入 hexo server
