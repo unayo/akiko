@@ -1,21 +1,22 @@
----
 title: 小仙女觀音蓮 | 美麗多肉植物介紹與養護指南
 description: 小仙女觀音蓮是一種受歡迎的多肉植物，以其粉嫩的蓮花狀葉片深受園藝愛好者喜愛。了解如何照顧這款可愛的植物，並學習室內擺設建議。
-categories: 
-- [觀音蓮, 小仙女觀音蓮]
-- [多肉植物]
-- [觀葉植物]
+categories:
+  - 觀音蓮
+  - 小仙女觀音蓮
+  - 觀葉植物
+  - 多肉植物
 tags:
-- [觀音蓮, 小仙女觀音蓮]
-- [多肉植物]
-- [觀葉植物]
+  - 觀葉植物
+  - '觀音蓮,小仙女觀音蓮'
+  - 多肉植物
+date: 2024-09-24 16:10:00
 ---
-
+![我的圖片](https://images.unsplash.com/photo-1542500186-6edb30855637?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 # 小仙女觀音蓮（Echeveria 'Lola'）介紹與養護指南
 
 小仙女觀音蓮，學名 **Echeveria 'Lola'**，是一款非常受歡迎的多肉植物。它以蓮花狀的葉片、優雅的形態和獨特的粉色至紫色的葉片色彩而廣受喜愛。這款多肉植物不僅容易養護，還能為家中增添一絲優雅和童話般的氣息。
 
-![小仙女觀音蓮](https://example.com/echeveria_lola.jpg)
+![小仙女觀音蓮](https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=2852&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 
 ## 小仙女觀音蓮的特點
 
