@@ -89,6 +89,65 @@
       </tags>
   </entry>
   <entry>
+    <title>PostgreSQL 基礎教學 | 建立表單、新增資料、刪除資料、查詢資料</title>
+    <url>/akiko/2024/11/20/PostgreSQL-1/</url>
+    <content><![CDATA[<p>PostgreSQL 是一款功能強大的開源關聯式資料庫管理系統，非常適合用於中大型專案中。這篇教學將帶你快速學會如何進行以下操作：</p>
+<ol>
+<li>建立資料表</li>
+<li>新增資料</li>
+<li>查詢資料</li>
+<li>更新資料</li>
+<li>刪除資料</li>
+</ol>
+<hr>
+<h2 id="1-建立資料表-Create-Table"><a href="#1-建立資料表-Create-Table" class="headerlink" title="1. 建立資料表 (Create Table)"></a>1. 建立資料表 (Create Table)</h2><p>在資料庫中建立一個名為 <code>products</code> 的資料表，用來儲存產品相關資訊。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> products (</span><br><span class="line">    product_id SERIAL <span class="keyword">PRIMARY</span> KEY,   <span class="comment">-- 自動增長的產品 ID</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,      <span class="comment">-- 產品名稱，最多100個字符</span></span><br><span class="line">    category <span class="type">VARCHAR</span>(<span class="number">50</span>),            <span class="comment">-- 產品類別</span></span><br><span class="line">    price <span class="type">NUMERIC</span>(<span class="number">10</span>, <span class="number">2</span>),            <span class="comment">-- 價格，小數點後保留2位</span></span><br><span class="line">    in_stock <span class="type">BOOLEAN</span> <span class="keyword">DEFAULT</span> <span class="literal">TRUE</span>    <span class="comment">-- 是否有庫存，預設為有</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="欄位說明："><a href="#欄位說明：" class="headerlink" title="欄位說明："></a>欄位說明：</h4><ul>
+<li>product_id：自動增長的主鍵，PostgreSQL 會為每筆資料自動分配唯一的 ID。</li>
+<li>name：產品名稱，不允許為空值。</li>
+<li>category：產品分類。</li>
+<li>price：產品價格，支援小數格式。</li>
+<li>in_stock：庫存狀態，布林值，預設為 TRUE。</li>
+</ul>
+<h2 id="2-新增資料-Insert-Data"><a href="#2-新增資料-Insert-Data" class="headerlink" title="2. 新增資料 (Insert Data)"></a>2. 新增資料 (Insert Data)</h2><p>將資料插入 products 資料表，以下是範例資料：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> products (name, category, price, in_stock)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">    (<span class="string">&#x27;手機&#x27;</span>, <span class="string">&#x27;3C&#x27;</span>, <span class="number">999.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;耳機&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>, <span class="number">49.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;洗衣機&#x27;</span>, <span class="string">&#x27;家電&#x27;</span>, <span class="number">4999.99</span>, <span class="literal">FALSE</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-查詢資料-Select-Data"><a href="#3-查詢資料-Select-Data" class="headerlink" title="3. 查詢資料 (Select Data)"></a>3. 查詢資料 (Select Data)</h2><p>查詢所有資料<br>想要查詢表中的所有產品，可以使用以下指令：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products;</span><br></pre></td></tr></table></figure>
+
+<h3 id="篩選特定條件的資料"><a href="#篩選特定條件的資料" class="headerlink" title="篩選特定條件的資料"></a>篩選特定條件的資料</h3><p>查詢 <code>category</code> 為「3C」的產品：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;3C&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>查詢價格大於 100 的產品：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用進階篩選條件"><a href="#使用進階篩選條件" class="headerlink" title="使用進階篩選條件"></a>使用進階篩選條件</h3><p>查詢 <code>category</code> 為「3C」或「配件」的產品：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;3C&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>範圍查詢（價格介於 50 到 1000）：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="keyword">BETWEEN</span> <span class="number">50</span> <span class="keyword">AND</span> <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-更新資料-Update-Data"><a href="#4-更新資料-Update-Data" class="headerlink" title="4. 更新資料 (Update Data)"></a>4. 更新資料 (Update Data)</h2><p>將「手機」的價格更新為 899.99：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products</span><br><span class="line"><span class="keyword">SET</span> price <span class="operator">=</span> <span class="number">899.99</span></span><br><span class="line"><span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;手機&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>注意：<br>WHERE 條件是必需的，否則會更新整個表內的所有資料！</p>
+<h2 id="5-刪除資料-Delete-Data"><a href="#5-刪除資料-Delete-Data" class="headerlink" title="5. 刪除資料 (Delete Data)"></a>5. 刪除資料 (Delete Data)</h2><p>刪除 category 為「家電」的所有產品：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;家電&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="6-刪除資料表-Drop-Table"><a href="#6-刪除資料表-Drop-Table" class="headerlink" title="6. 刪除資料表 (Drop Table)"></a>6. 刪除資料表 (Drop Table)</h2><p>若不再需要這個資料表，可以直接刪除：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> products;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>PostgreSQL</category>
+        <category>資料庫教學</category>
+        <category>SQL 指令</category>
+        <category>基礎教學</category>
+      </categories>
+      <tags>
+        <tag>PostgreSQL</tag>
+        <tag>SQL 教學,資料庫操作,建立表單</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Tables 資料表管理教學 | 創建、修改與刪除資料表的全方位指南</title>
     <url>/akiko/2024/11/24/PostgreSQL2/</url>
     <content><![CDATA[<p>資料表 (Tables) 是關聯式資料庫的核心，所有數據都儲存在這些表格中。本教學將幫助您掌握資料表的基礎管理操作，包括 <strong>主鍵 (Primary Key)<strong>、</strong>外來鍵 (Foreign Key)</strong> 的設置，以及如何使用 <strong>INNER JOIN</strong> 連接多張資料表進行查詢。</p>
@@ -161,65 +220,6 @@
       </categories>
       <tags>
         <tag>資料表,SQL 指令,資料庫操作</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PostgreSQL 基礎教學 | 建立表單、新增資料、刪除資料、查詢資料</title>
-    <url>/akiko/2024/11/20/PostgreSQL-1/</url>
-    <content><![CDATA[<p>PostgreSQL 是一款功能強大的開源關聯式資料庫管理系統，非常適合用於中大型專案中。這篇教學將帶你快速學會如何進行以下操作：</p>
-<ol>
-<li>建立資料表</li>
-<li>新增資料</li>
-<li>查詢資料</li>
-<li>更新資料</li>
-<li>刪除資料</li>
-</ol>
-<hr>
-<h2 id="1-建立資料表-Create-Table"><a href="#1-建立資料表-Create-Table" class="headerlink" title="1. 建立資料表 (Create Table)"></a>1. 建立資料表 (Create Table)</h2><p>在資料庫中建立一個名為 <code>products</code> 的資料表，用來儲存產品相關資訊。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> products (</span><br><span class="line">    product_id SERIAL <span class="keyword">PRIMARY</span> KEY,   <span class="comment">-- 自動增長的產品 ID</span></span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,      <span class="comment">-- 產品名稱，最多100個字符</span></span><br><span class="line">    category <span class="type">VARCHAR</span>(<span class="number">50</span>),            <span class="comment">-- 產品類別</span></span><br><span class="line">    price <span class="type">NUMERIC</span>(<span class="number">10</span>, <span class="number">2</span>),            <span class="comment">-- 價格，小數點後保留2位</span></span><br><span class="line">    in_stock <span class="type">BOOLEAN</span> <span class="keyword">DEFAULT</span> <span class="literal">TRUE</span>    <span class="comment">-- 是否有庫存，預設為有</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="欄位說明："><a href="#欄位說明：" class="headerlink" title="欄位說明："></a>欄位說明：</h4><ul>
-<li>product_id：自動增長的主鍵，PostgreSQL 會為每筆資料自動分配唯一的 ID。</li>
-<li>name：產品名稱，不允許為空值。</li>
-<li>category：產品分類。</li>
-<li>price：產品價格，支援小數格式。</li>
-<li>in_stock：庫存狀態，布林值，預設為 TRUE。</li>
-</ul>
-<h2 id="2-新增資料-Insert-Data"><a href="#2-新增資料-Insert-Data" class="headerlink" title="2. 新增資料 (Insert Data)"></a>2. 新增資料 (Insert Data)</h2><p>將資料插入 products 資料表，以下是範例資料：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> products (name, category, price, in_stock)</span><br><span class="line"><span class="keyword">VALUES</span></span><br><span class="line">    (<span class="string">&#x27;手機&#x27;</span>, <span class="string">&#x27;3C&#x27;</span>, <span class="number">999.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;耳機&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>, <span class="number">49.99</span>, <span class="literal">TRUE</span>),</span><br><span class="line">    (<span class="string">&#x27;洗衣機&#x27;</span>, <span class="string">&#x27;家電&#x27;</span>, <span class="number">4999.99</span>, <span class="literal">FALSE</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-查詢資料-Select-Data"><a href="#3-查詢資料-Select-Data" class="headerlink" title="3. 查詢資料 (Select Data)"></a>3. 查詢資料 (Select Data)</h2><p>查詢所有資料<br>想要查詢表中的所有產品，可以使用以下指令：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products;</span><br></pre></td></tr></table></figure>
-
-<h3 id="篩選特定條件的資料"><a href="#篩選特定條件的資料" class="headerlink" title="篩選特定條件的資料"></a>篩選特定條件的資料</h3><p>查詢 <code>category</code> 為「3C」的產品：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;3C&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>查詢價格大於 100 的產品：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="operator">&gt;</span> <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用進階篩選條件"><a href="#使用進階篩選條件" class="headerlink" title="使用進階篩選條件"></a>使用進階篩選條件</h3><p>查詢 <code>category</code> 為「3C」或「配件」的產品：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="keyword">IN</span> (<span class="string">&#x27;3C&#x27;</span>, <span class="string">&#x27;配件&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p>範圍查詢（價格介於 50 到 1000）：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> price <span class="keyword">BETWEEN</span> <span class="number">50</span> <span class="keyword">AND</span> <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-更新資料-Update-Data"><a href="#4-更新資料-Update-Data" class="headerlink" title="4. 更新資料 (Update Data)"></a>4. 更新資料 (Update Data)</h2><p>將「手機」的價格更新為 899.99：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products</span><br><span class="line"><span class="keyword">SET</span> price <span class="operator">=</span> <span class="number">899.99</span></span><br><span class="line"><span class="keyword">WHERE</span> name <span class="operator">=</span> <span class="string">&#x27;手機&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>注意：<br>WHERE 條件是必需的，否則會更新整個表內的所有資料！</p>
-<h2 id="5-刪除資料-Delete-Data"><a href="#5-刪除資料-Delete-Data" class="headerlink" title="5. 刪除資料 (Delete Data)"></a>5. 刪除資料 (Delete Data)</h2><p>刪除 category 為「家電」的所有產品：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;家電&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="6-刪除資料表-Drop-Table"><a href="#6-刪除資料表-Drop-Table" class="headerlink" title="6. 刪除資料表 (Drop Table)"></a>6. 刪除資料表 (Drop Table)</h2><p>若不再需要這個資料表，可以直接刪除：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> products;</span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>PostgreSQL</category>
-        <category>資料庫教學</category>
-        <category>SQL 指令</category>
-        <category>基礎教學</category>
-      </categories>
-      <tags>
-        <tag>PostgreSQL</tag>
-        <tag>SQL 教學,資料庫操作,建立表單</tag>
       </tags>
   </entry>
 </search>
