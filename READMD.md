@@ -4,6 +4,7 @@ https://unayo.github.io/akiko/
 - node: v18
 - hexo-deployer-git // 部署
 - theme: hipaper
+- google search console
 ## 指令
 - npm install
 - hexo s  // 架設本地端伺服器，也可以輸入 hexo server
